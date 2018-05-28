@@ -1,0 +1,23 @@
+生成清除Eclipse项目结构：
+mvn eclipse:eclipse
+mvn eclipse:clean
+
+清理（删除target目录下编译内容）
+mvn clean
+
+仅打包Web页面文件
+mvn war:exploded
+
+编译项目
+mvn compile
+
+打包发布
+mvn package
+
+打包时跳过测试
+mvn package -Dmaven.test.skip=ture
+
+打出依赖数
+call mvn dependency:tree >1.txt
+call cd ..
+@pause

@@ -1,0 +1,228 @@
+1) 数组
+1 2 3          1 4 7
+4 5 6    ->    2 5 8 
+7 8 9          3 6 9
+public class helloword {  
+    public static void main(String args[]){  
+        int data [][] = new int [][] {{1,2,3},{4,5,6},{7,8,9}};  
+        reverse(data);  
+        print1(data);  
+    }  
+    //将矩阵转置  
+    public static void reverse(int temp [][] ){  
+        for(int i=0;i<temp.length;i++){  
+            for(int j=i;j<temp[i].length;j++){  
+                int k=temp[i][j];  
+                temp[i][j]=temp[j][i];  
+                temp[j][i]=k;  
+              }  
+        }  
+    }  
+    //将矩阵输出  
+    public static void print1(int temp[][]){  
+        for(int i=0;i<temp.length;i++){  
+            for(int j=0;j<temp[i].length;j++){  
+                System.out.print(temp[i][j]+"\t");  
+            }  
+            System.out.println();  
+        }  
+    }  
+      
+}  
+
+1 2 3      7 4 1
+4 5 6  ->  8 5 2
+7 8 9      9 6 3
+方法1:col = row  row+col= length
+public class Array {
+	  public static void main(String args[]){  
+	        int data [][] = new int [][] {{1,2,3},{4,5,6},{7,8,9}};  
+	        reverse(data);  
+	        print1(data);  
+	    }  
+	    //将矩阵转置  
+	    public static void reverse(int temp [][] ){
+	    	int newData [][] = new int[temp.length][temp.length];
+	         for(int i=0;i< temp.length;i++){
+	        	 for(int j=0;j<temp[i].length;j++){
+	        		 newData[j][temp[i].length-1-i]=temp[i][j];
+	        		  System.out.print(j);
+	        		  System.out.println( temp[i].length-1-i);
+	        	 }
+	     
+	         }
+	         for(int i=0;i<temp.length;i++){  
+		            for(int j=0;j<temp[i].length;j++){  
+		            	temp[i][j]=newData[i][j];
+		            }}
+	         
+	    }  
+	    //将矩阵输出  
+	    public static void print1(int temp[][]){  
+	        for(int i=0;i<temp.length;i++){  
+	            for(int j=0;j<temp[i].length;j++){  
+	                System.out.print(temp[i][j]+"\t");  
+	            }  
+	            System.out.println();  
+	        }  
+	    }  
+}
+
+
+方法2：
+先转一下 在通过列对换实现
+1 2 3          1 4 7       7 4 1
+4 5 6    ->    2 5 8  ->   8 5 2
+7 8 9          3 6 9       9 6 3
+
+public class Array {
+	public static void main(String args[]) {
+		int data[][] = new int[][] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+		reverse(data);
+		exchange(data);
+		print1(data);
+	}
+
+	// 将矩阵转置
+	public static void reverse(int temp[][]) {
+		for (int i = 0; i < temp.length; i++) {
+			for (int j = i; j < temp[i].length; j++) {
+				int k = temp[i][j];
+				temp[i][j] = temp[j][i];
+				temp[j][i] = k;
+			}
+
+		}
+	}
+	
+	public static void exchange(int temp[][]){
+		int start = 0;
+		int end =temp.length-1;
+		for(int i=0;i<temp.length/2;i++){
+			for(int j=0;j<temp.length;j++){
+				int k =temp[j][start];
+				temp[j][start] = temp[j][end];
+				temp[j][end] = k;
+			}
+			start++;
+			end--;
+		}
+	}
+
+	// 将矩阵输出
+	public static void print1(int temp[][]) {
+		for (int i = 0; i < temp.length; i++) {
+			for (int j = 0; j < temp[i].length; j++) {
+				System.out.print(temp[i][j] + "\t");
+			}
+			System.out.println();
+		}
+	}
+}
+
+
+
+
+
+回旋打印矩阵
+1 2 3          1 2 3      
+4 5 6    ->    8 9 4 
+7 8 9          7 6 5 
+
+public class WhirlArray {
+    private static int currentNum =0;
+    private static int minX=0;
+    private static int minY=0;
+    private static int maxX;
+    private static int maxY;
+    
+	public static void main(String args[]) {
+		int data[][] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+		maxX = data.length-1;
+		maxY = data.length-1;
+		whirArray(data);
+		print1(data);
+	}
+	
+	// 将矩阵输出
+		public static void print1(int temp[][]) {
+			for (int i = 0; i < temp.length; i++) {
+				for (int j = 0; j < temp[i].length; j++) {
+					System.out.print(temp[i][j] + "\t");
+				}
+				System.out.println();
+			}
+		}
+    
+    private static void whirArray(int [][] temp){
+    	int maxNum=temp.length*temp.length;
+    	
+    	while(currentNum<maxNum){
+    		if(currentNum<maxNum){
+    			processRight(temp);
+    		}
+    		if(currentNum<maxNum){
+    			processDown(temp);
+    		}
+    		if(currentNum<maxNum){
+    			processLeft(temp);
+    		}
+    		if(currentNum<maxNum){
+    			processUp(temp);
+    		}
+    	}
+    }
+	
+    //向右组装
+    private static void processRight(int [][] temp){
+    	for(int i=minX;i<=maxX;i++){
+    		temp[minY][i]=++currentNum;
+    	}
+    	minY++;
+    }
+    
+    //向下组装
+    private static void processDown(int [][] temp){
+    	for(int i=minY;i<=maxY;i++){
+    		temp[i][maxX]=++currentNum;
+    	}
+    	maxX--;
+    }
+    
+    //向左组装
+    private static void processLeft(int [][] temp){
+    	for(int i=maxX;i>=minX;i--){
+    		temp[maxY][i]=++currentNum;
+    	}
+    	maxY--;
+    }
+    
+    
+    //向上组装
+    private static void processUp(int [][] temp){
+    	for(int i=maxY;i>=minY;i--){
+    		temp[i][minX]=++currentNum;
+    	}
+    	minX++;
+    }
+    
+}
+
+
+给定一个整形数组和一个整数target，返回2个元素的下标，它们满足相加的和为target。 
+你可以假定每个输入，都会恰好有一个满足条件的返回结果。
+
+方法一：时间复杂度O(n^2)
+public static int[] sumArray(int[] array,int targart){
+		for(int i=0;i<array.length-1;i++){
+			for(int j=i+1;j<array.length;j++){
+				if(array[i]+array[j] == targart){
+					return new int[]{i,j};
+				}
+			}
+		}
+		
+		return new int[]{};
+	}
+
+

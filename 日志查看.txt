@@ -1,0 +1,11 @@
+ssh root@xxx  连接到ip为xxx 的机器
+
+cd /home/admin/hjauditor/logs 进入目录
+
+tail -f hjauditor.log   查看日志
+tail -1000f /home/admin/hjauditor/logs/hjauditor.log
+cat -n test.log |grep "地形"  得到关键日志的行号
+sed -n '/2017-12-20 15:00/,/2017-12-20 15:50/p' hjauditor.log   某段时间内的日志
+cat -n test.log |grep "地形"  >xxx.txt   保存到文件
+cat app.log |grep 'error'  查询日志中含有某个关键字的信息
+tail  -n  10  app.log   尾部10行的日志

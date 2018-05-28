@@ -1,0 +1,45 @@
+某字段list查询
+ <isNotNull property="invoiceTypeList" prepend="AND">
+	      T1.INVOICE_TYPE in
+	      <iterate prepend=" " property="invoiceTypeList" open="(" close=")" conjunction=",">
+		   #invoiceTypeList[]#
+		   </iterate>
+	  </isNotNull>
+	  
+%APPDATA%\syntevo\SmartGit\
+remove the file settings.xml	  
+
+Map<String, Object> extendInfo = FastJsonTool.deserializeWithClz(fcBillATO.getExtendInfo());
+
+select 下拉 选择的值
+var options = jQuery("#bizTypeStatus option:selected").val();
+
+
+
+<!-- 	<div class="clearBoth"></div>
+	<div class="p-20 panel wm_clearfix1">
+		<h4 class="panel-header">运行实例</h4>
+		$control.setTemplate("check/checkInstance/instance.vm")
+		 <nav id="pagination" class="fr mt-20"></nav>
+		<div style="float: right">
+		
+			$control.setTemplate("pagination.vm").setParameter("url","manage").setParameter("page",$!query)
+		</div>
+	</div>  -->
+
+	
+ssh root@xxx  连接到ip为xxx 的机器
+
+cd /home/admin/hjauditor/logs 进入目录
+
+tail -f hjauditor.log   查看日志
+tail -1000f /home/admin/hjauditor/logs/hjauditor.log
+cat -n test.log |grep "地形"  得到关键日志的行号
+sed -n '/2017-12-20 15:00/,/2017-12-20 15:50/p' hjauditor.log   某段时间内的日志
+cat -n test.log |grep "地形"  >xxx.txt   保存到文件
+cat app.log |grep 'error'  查询日志中含有某个关键字的信息
+tail  -n  10  app.log   尾部10行的日志
+
+String.format("unknown status:%s", task.getStatus())
+
+

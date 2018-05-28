@@ -1,0 +1,52 @@
+刷新Maven配置的方法为：
+
+（1）右键单击项目；
+
+（2）在弹出菜单中选择Maven|Reimport菜单项。
+
+此时，IDEA将通过网络自动下载相关依赖，并存放在Maven的本地仓库中。另外，可以将Maven的刷新设置为自动，配置方法为：
+
+（1）单击File|Setting菜单项，打开Settings选项卡；
+
+（2）在左侧的目录树中，展开Maven节点；
+
+（3）勾选Import Maven projects automatically选择项。
+
+
+alt + 1 左侧导航
+
+
+ctrl+alt+B 找到实现方法
+
+ctrl+F4  关闭当前窗口
+
+ctrl+alt+T  异常处理
+
+ctrl+alt+L 格式化代码
+
+Alt + Enter  导包
+
+Alt+Insert，可以生成构造器/Getter/Setter等
+
+ctrl+alt+T  异常处理快捷键
+
+ctrl + F9   重新编译
+
+ctrl +F12   找方法
+
+ctr+shift+u 大小写切换
+
+shift+F6  重命名
+
+alt+Enter  自动修正错误
+
+F2 定位报错所在位置
+
+debugger
+F8下一步
+F9 结束断点 下一个短点
+F7进入方法体
+Shift+F8 跳回到原来的地方
+Alt+F8 可以通过在 Debug 的状态下，选中对象，弹出可输入计算表达式调试框，查看该输入内容的调试结果 
+
+
