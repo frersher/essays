@@ -1,0 +1,375 @@
+java的垃圾回收
+通过可达性算法分析，通过一系列的GC root的节点作为起始节点向下查找，搜索所经过的路径被称为"引用链"，当一个对象到Gc root没经过任何引用链则证明此对象是不可用的
+
+再谈引用
+JDK1.2 将对象引用分为4种：强引用、软引用、弱引用、虚引用
+
+
+垃圾回收算法
+1、标记-清除算法
+   原理简单，但是效率不高、导致回收后的空间不连续，如果放入较大对象时，还需要进行另一次垃圾回收
+2、复制算法
+    将内存分为两块，每次只是用其中的一块，这一块快用完的时候，把存活的对象复制到另外一块，然后把一用完的空间回收掉。
+3、标记-整理算法
+    和标记清理算法类似，只是后面不是直接回收，而是将存活的对象移到一端，然后进行回收边界以外的区域(老年代)
+4、分代收集算法
+    一般把java堆分为新生代、老年代，新生代存活的对象较少使用复制算法，老年代使用复制算法、标记-清除算法。
+
+ 堆内存的划分
+ 1.新生代
+   a.Eden区
+   b。Serivor区
+ 2.老年代   
+ 虚拟机给每个对象定义一个对象年龄，如果Eden的对象经过一次GC还存活，并且可以被survivor容纳的话，将对象移到survivor，并将年龄设为1，对象在survivor中没经过一次GC年龄加一，到一定阶段对象会被放入老年代，默认是15，可以通过jvm参数修改
+如果survivor中相同年龄的对象占survivor空间的一半，年龄大于或等于这个年龄的对象也可以进入老年代
+
+
+
+回收策略
+1.大多数情况下对象分配在Eden中，如果Eden空间不足时，虚拟机会发起一次Minor Gc
+2.新生代Gc(Minor Gc)：在新生代发生的垃圾回收动作，因为java对象大多数有朝生夕灭的规律，所以Minor Gc发生的非常频繁，而且速度也很快
+3.老年代Gc(Major Gc（清理老年代）、Full Gc（ 是清理整个堆空间—包括年轻代和老年代）)：Full Gc 往往会伴随着一次Minor Gc，当Minor Gc产生时会判断
+  a.老年代最大可用的连续空间是否大于新手代所有对象所占的空间  成立 进行Minor Gc
+  b.a不成立 查看虚拟机参数是否允许担保失败 如果不允许Full Gc 如果允许，继续检查老年代最大连续可用空间是否大于历次晋升到老年代对象的平均大小 
+  c.b成立 进行Minor Gc 如果不成立进行Full Gc
+
+
+
+  虚拟机的类加载机制
+类的生命周期氛围7个阶段：
+加载：通过类的全限定名找到类的二进制字节流，再将字节流代表的静态存储结构转化为方法区的运行时数据结构，最后在内存中生成class对象
+
+验证：简单的说就是保证你的class文件中包含的信息符合虚拟机要求
+
+准备：为类变量分配内存并设置初始值注意：public static int value=123;这行代码在准备阶段 value的初始值为0，准备阶段不执行任何java代码，只有在初始化时才把value的值赋为123
+
+解析：虚拟机将常量池内的符号引用替换为直接引用的过程
+
+初始化：初始化阶段是执行类构造器方法的过程
+(家政被解除)
+
+
+
+  双亲委派模型：
+          启动类加载器
+
+          扩展类加载器
+
+          应用程序类加载器(系统类加载器)
+
+    自定义类加载器     自定义类加载器
+      
+如上：类加载器之间的关系称为双亲委派模型（除了顶层 启动类加载器之外其他的类加载器都有自己的父类加载器）
+
+双亲委派模式的工作流程：如果类加载器收到了类加载的请求，首先会被这个请求委派给自己的父类，每层都是如此，最终请求会到最顶层的启动类加载器，如果父类无法完成这个加载请求(搜索的范围内没有这个类)，子类才会尝试着自己完成这个请求。
+
+好处：java类随着它的类加载器一起有着累层级关系，比如object无论哪个类加载它，最终都会委托到启动类加载器，所以object在各种的类加载器中都是同一个类。所以双亲委派机制保证类java程序运行的稳定性。
+
+
+ThreadLocal
+ThreadLocal设计的初衷：提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。
+实现：
+  1.每个ThreadLocal类创建一个Map,然后用线程的id作为key，实列对象作为value值，这样可以做到线程隔离的效果（最简单的实现方式）
+
+
+
+ SEQUENCE
+ nextValue
+    1.如果currentRange==null，查询并修改(扩展)currentRange 初始化value
+    2.获取nextVale=value+1
+
+HashMap的线程不安全问题
+
+synchronized
+
+Thread.yield()
+CPU从一个线程转移到另一个线程
+
+Executor：一个接口，其定义了一个接收Runnable对象的方法executor，其方法签名为executor(Runnable command),
+ 
+ExecutorService：是一个比Executor使用更广泛的子类接口，其提供了生命周期管理的方法，以及可跟踪一个或多个异步任务执行状况返回Future的方法
+ 
+AbstractExecutorService：ExecutorService执行方法的默认实现
+ 
+ScheduledExecutorService：一个可定时调度任务的接口
+ 
+ScheduledThreadPoolExecutor：ScheduledExecutorService的实现，一个可定时调度任务的线程池
+ 
+ThreadPoolExecutor：线程池，可以通过调用Executors以下静态工厂方法来创建线程池并返回一个ExecutorService对象：
+
+CachedThreadPool：为每一个任务创建线程
+FixedThreadPool：一次性的预执行代替了高昂的线程分配，同时也限制了线程的数量
+SingleThreadPool：相当于线程数为1的FixThreadPool
+
+Runnable是执行工作的福利任务，没有返回值，如果希望执行任务后返回值，可以实现Callable接口
+
+
+线程的优先级
+可以用getPriority、setPriority查看和设置
+
+
+HashMap
+数据加链表
+初始化是通过initailCapacity：16和laodFactor：0.75创建默认的链表数据组
+
+ConcurrentHashMap
+1）相对于HashTable  整个加锁的形式，采用了分段加锁的方式，只有hash值在同一个段中的数据才会发生竞争，如果分n段，理论上最高的并发度也是n。
+2）ConcurrentHashMap的读取并发，因为在读取的大多数时候都没有用到锁定。
+3) segment里面才是真正的hashtable
+
+
+重入锁
+又叫递归锁，指外层获取锁之后，内层的递归函数任有获取锁的代码，但受不影响。可重入锁的最大作用是避免死锁
+
+
+cglib动态代理
+
+
+java8新特性
+lambda表达式是一段可以传递的代码，
+lambda表达式实际上就是代码块的传递的实现
+Java虚拟机（JVM）的新特性
+PermGen空间被移除了，取而代之的是Metaspace（JEP 122）
+
+Socked
+是基于TCP/IP的流套接字，它是一种稳定的通信协议
+
+
+Mybatis的缓存
+一级缓存
+mybatis默认开启一级缓存，一级缓存是在SqlSession 层面进行缓存的。即，同一个SqlSession ，多次调用同一个Mapper和同一个方法的同一个参数，只会进行一次数据库查询，然后把数据缓存到缓冲中，以后直接先从缓存中取出数据，不会直接去查数据库。
+
+二级缓存
+文件配置了cacheEnabled=true时，就会开启二级缓存，二级缓存是mapper级别的，也就说不同的sqlsession使用同一个mapper查询是，查询到的数据可能是另一个sqlsession做相同操作留下的缓存
+之前说一级缓存是Executor执行操作时会去PerpetualCache中的HashMap中根据cacheKey查询缓存。
+而二级缓存的是这样的：SqlSession对象创建Executor对象时，会对Executor对象加上一个装饰者：CachingExecutor，然后将操作数据库的任务交给CachingExecutor，此时CachingExecutor会查找二级缓存是否有需要的数据，如果没有则将任务交给Executor对象。
+这里使用的装饰器模式，CachingExecutor包装了Executor接口，
+由此刻见，如果你配置了二级缓存，那么查询数据的顺序应该为：二级缓存→一级缓存→数据库
+
+
+装饰者模式
+动态地将责任附加到对象上。想要扩展功能， 装饰者提供有别于继承的另一种选择
+装饰模式比继承要灵活。避免了继承体系臃肿。而且降低了类于类之间的关系
+
+NIO和IO的区别
+IO面向流、NIO面向buffer(缓冲区)
+NIO核心组成
+a) Channels   可以从Buffers中读数据，也可以写数据到Buffers
+FileChannel
+DatagramChannel
+SocketChannel
+ServerSocketChann
+
+int bytesWritten = inChannel.write(buf);  
+int bytesRead = inChannel.read(buf);
+
+b) Buffers 有三个属性：capacity、position、limit
+ByteBuffer
+CharBuffer
+DoubleBuffer
+FloatBuffer
+IntBuffer
+LongBuffer
+ShortBuffer
+
+c)Selector
+ 要使用Selector，得向Selector注册Channel，然后调用它的select()方法。这个方法会一直阻塞到某个注册的通道有事件就绪。一旦这个方法返回，线程就可以处理这些事件，事件的例子有如新连接进来，数据接收等。
+
+
+负载均衡的简单实现
+存在一个IpMap 存放ip和对应的权重
+ serverWeightMap.put("192.168.1.100", 1);
+ serverWeightMap.put("192.168.1.101", 2);
+
+1)轮询
+   重建一个Map，避免服务器的上下线导致的并发问题
+   serverMap=serverWeightMap;
+   //获取IP地址List
+   Set<String> keySet = serverMap.keySet();
+   //定义一个Ip地址最终轮询的List
+   ArrayList<String> keyList = new ArrayList<String>();
+
+   Iterator<String> iterator = keySet.iterator();
+  //根据权重组装List
+   while(iterator.hasNext()){
+       String service = iterator.next();
+       Integer weight = serverMap.get(service);
+       for(int i=0;i<weight;i++){
+          keyList.add(service); 
+       }
+   }
+
+     //轮询取出目标IP地址
+     String server = null;
+        synchronized (pos)
+        {
+            if (pos > keySet.size())
+                pos = 0;
+            server = keyList.get(pos);
+            pos ++;
+        }
+   return server;
+
+
+   其他方法：随机（Random）法、源地址哈希（Hash）法
+   参考：https://www.cnblogs.com/szlbm/p/5588555.html
+
+
+jvm内存区域划分
+程序计数器     如果当前线程执行的是非native方法，程序计数器保存的是当前执行的指令地址，如果是native方法则程序计数器中的值是undefined
+java栈         存储局部变量，如果变量是基本类型存储值如果变量是引用类型存储引用
+本地方法栈     和jvm栈所发挥的作用类似，区别是jvm栈为jvm执行java方法（字节码）服务，而本地方法栈为jvm使用的native方法服务。
+方法区         用于被虚拟机加载的类信息，常量、静态变量
+堆             存放对象实列
+
+
+线程池ThreadPoolExecutor、
+ThreadPoolExecutor继承AbstractExecutorService
+AbstractExecutorService 实现 ExecutorService 接口
+ExecutorService 继承 Executor接口
+execute()      通过这个方法向线程池提交一个任务，交由线程池执行。
+submit()       也是向线程池提交任务，但是可以返回执行结果(利用了Feture来获取执行结果)
+shutdown()     关闭线程
+shutdownNow()  关闭线程
+
+
+mysql有哪些索引
+数据结构角度：
+B+树索引
+Hash索引
+FULLTEXT索引
+R-Tree索引
+
+物理存储角度：
+聚合索引
+非聚合索引
+
+逻辑角度：
+主键索引
+普通索引
+组合索引
+唯一索引
+
+
+
+加索引的好处和坏处(为什么加索引会比较快)
+
+
+
+加索引后导致数据插入效率变慢，如何提高插入效率
+如果业务运行可以把索引干掉
+采用异步写入、可以使用队列
+
+*****项目难点*****
+
+印象比较深刻的线上bug
+
+HashMap 1.8相比于之前好在哪里
+
+并发环境下还会使用hashTable吗(concurrenHashMap)
+
+如果fullGc比较频繁怎么处理
+
+
+Spring 使用注解方式进行事务管理
+使用步骤：
+1)spring配置文件中引入tx命名空间
+2)具有@Transactional 注解的bean配置为声明式事务支持
+3)可以在接口、类、方法加@Transactional使用事务
+
+Spring配置文件中关于事务配置总是由三个组成部分，
+分别是DataSource、TransactionManager和代理机制这三部分
+
+
+
+线程池的作用
+减少线程创建、销毁的次数，工作线程可以使用多次
+可以根据系统情况调整执行线程的数量，防止消耗过多内存
+
+
+Redis最为常用的数据类型主要有以下：
+String
+Hash   Value是hashMap
+List
+Set
+Sorted set
+pub/sub
+Transactions
+
+
+mysql性能调优
+1.最基本的调优是使表在磁盘中占的空间尽可能的小，在更小的列上做索引也会占更少的资源
+    a) 使用正确合适的类型，不要将数字存储为字符串。
+    b) 尽可能地使用最有效(最小)的数据类型。MySQL有很多节省磁盘空间和内存的专业化类型。
+    c) 尽可能使用较小的整数类型使表更小。例如，MEDIUMINT经常比INT好一些，因为MEDIUMINT列使用的空间要少25%。
+    d) 如果可能，声明列为NOT NULL。它使任何事情更快而且每列可以节省一位。注意如果在应用程序中确实需要NULL，应该毫无疑问使用它，只是避免 默认地在所有列上有它。
+
+2.索引
+    a) MySQL只会使用前缀，例如key(a, b) …where b=5 将使用不到索引。    
+    b) 要选择性的使用索引。在变化很少的列上使用索引并不是很好，例如性别列。
+    c) 避免重复索引
+    d) 在查询中要使用到索引（使用explain查看），可以减少读磁盘的次数，加速读取数据
+    e) 相近的键值比随机好。Auto_increment就比uuid好。
+  
+
+
+天猫消费积分发票处理与OCR对接
+TP(支付)根据发票账单汇总生成开票通知单,TP将月账单同步到TAX(税务)，
+税务将月账单展示在账房，商家通过账房勾选月账单生成开票通知单，线下邮寄发票
+TAX收到发票，OCR扫描录入发票，系统将发票进行核销
+
+稽核工具
+用于业务对账，业务方产生交易数据，交易数据可能存在不平情况，如果通过人工排除不平数据需要重复写很多sql
+所以需要一个类似于模板的工具，只需要配置几个核心的字段(如：核对值、核对关联条件、表名)，其他东西可以通过程序自动化完成。
+针对这个需求就有了稽核工具的产生。
+
+主要的实现原理：
+业务配置(手动接入新的业务)
+      |
+      |手动配置
+      |
+      稽核任务配置(配置出数据收集的sql，也就是需要把需要对账的捞出来的sql)
+      |
+      |定时任务调度
+      |
+      a)通过稽核任务生成实列(将稽核任务run起来,拿到数据收集的sql,取出需要对账单数据，把数据放到稽核的数据集收集的表中,两方的数据分别放到不同的分区中，
+      b)在通过后台组装的一个sql把收集到的数据join 并且算出'核对值的差异' 后放到稽核的数据汇总的表中) 到这一步 就相当于比对出了不平的数据。
+      c)通过count语句统计出稽核结果
+      |
+      |同步调用、异步调用、接口幂等
+      |
+      稽核实列跑完后会生成汇总实列
+      |
+      |
+      预处理(通过判断数据是否人工处理过、如果业务方处理则需要调用第三方接口(交易没有账单金额, 
+       但是有支付宝金额的情况 进行重试销账，销账成功则自动处理完成,无需人工再跟进))
+       路由第三方接口规则:通过checkType创建一个consumerBean，在配置项中配置业务类型和接口的关系，第三方应用根据关系提供HSF接口
+       --当时遇到一个问题springBean加载顺序问题 通过depend-on解决
+      |
+      |
+      数据修复(人工排查定位问题)
+
+    最终稽核汇总
+    a)将单个普通实例汇总的不平数据进入沉淀池:allcheck_diff_hidden
+
+    b)沉淀池合并 放到 allcheck_diff_hidden_history_temp(每天合并一次,历史沉淀池(allcheck_diff_hidden_history)和沉淀池数据合并allcheck_diff_hidden)
+
+    c)对已经完成作废的稽核数据进行排除清理 放入:allcheck_diff_hidden_history_cancel
+
+    d)将从沉淀中期中和掉的数据放入一个独立的抵充分区，供后期排查问题 比如 9月1日 A01 订单source不平 100，9月2日 A01 订单target不平 100. 那么认为该数据是平衡的,将两条数据移动到takeout分区: allcheck_diff_hidden_history_takeout
+    (查询allcheck_diff_hidden_history_temp 的数据通过checkType、outBizId分组如果sum(baseAmount)=0 且count(1)=2 那么任务数据平的)
+
+
+    e)将修复过的数据忽略掉 allcheck_diff_hidden_history_takeout_deal
+      关联同步到云梯上的check_result_opreation中数据判断
+
+    f)获取最新数据 allcheck_diff_hidden_history 
+      从allcheck_diff_hidden_history_temp查询数据排除allcheck_diff_hidden_history_cancel
+    、allcheck_diff_hidden_history_takeout、allcheck_diff_hidden_history_takeout_deal
+
+
+
+
+
+
+
