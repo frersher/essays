@@ -354,6 +354,9 @@ Gc是一个典型的守护线程
 mysql优化
 1、优化sql和索引
 2、加缓存redis、memacached
+3、用mysql自带的分区
+4、垂直拆分
+5、水平拆分
 
 
 
