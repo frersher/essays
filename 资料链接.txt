@@ -1,0 +1,15 @@
+如何使用RedisTemplate访问Redis数据结构
+https://www.jianshu.com/p/7bf5dc61ca06
+
+java对redis的基本操作
+https://www.cnblogs.com/edisonfeng/p/3571870.html
+
+设计模式
+https://blog.csdn.net/carson_ho/article/details/54910518
+
+查询jar maven
+https://mvnrepository.com/artifact/log4j/log4j/1.2.13
+
+
+java出现OOM
+https://www.jianshu.com/p/2fdee831ed03
