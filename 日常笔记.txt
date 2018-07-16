@@ -43,3 +43,7 @@ tail  -n  10  app.log   尾部10行的日志
 String.format("unknown status:%s", task.getStatus())
 
 
+ToStringBuilder.reflectionToString  
+ToStringBuilder比较适合在打日志时，输出参数的信息，特别是在参数为对象时，该工具类能够很方便的自动打印对象中的属性值。
+
+
