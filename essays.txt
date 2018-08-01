@@ -466,6 +466,16 @@ spring加载servelet的过程
 
 
 
+
+java基础
+static、final、transient、volatile这一类的关键字，以及内部类、泛型这一类的高阶语法
+jvm
+并发知识与concurrent包
+设计模式和反射
+文件IO、NIO、网络IO以及网络协议
+
+
+
 天猫消费积分发票处理与OCR对接
 TP(支付)根据发票账单汇总生成开票通知单,TP将月账单同步到TAX(税务)，
 税务将月账单展示在账房，商家通过账房勾选月账单生成开票通知单，线下邮寄发票

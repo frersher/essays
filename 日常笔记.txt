@@ -49,3 +49,13 @@ ToStringBuilder±È½ÏÊÊºÏÔÚ´òÈÕÖ¾Ê±£¬Êä³ö²ÎÊıµÄĞÅÏ¢£¬ÌØ±ğÊÇÔÚ²ÎÊıÎª¶ÔÏóÊ±£¬¸Ã¹¤¾ßÀ
 
 Í¨¹ıname»ñÈ¡div
  jQuery("input[name='tableName']").value
+
+ĞŞ¸ÄÊôĞÔ
+ jQuery("input[name='tableNameNm']").attr("name","11111");
+
+ ¶à¸ö¶ÔÏó°ó¶¨Í¬Ò»¸ö·½·¨
+ https://blog.csdn.net/yangfanend/article/details/6723568
+
+
+ NIO
+ http://www.codeceo.com/article/java-nio.html
