@@ -1,24 +1,5 @@
-command + j  main方法提示
-sout。       输出提示
-
-
-刷新Maven配置的方法为：
-
-（1）右键单击项目；
-
-（2）在弹出菜单中选择Maven|Reimport菜单项。
-
-此时，IDEA将通过网络自动下载相关依赖，并存放在Maven的本地仓库中。另外，可以将Maven的刷新设置为自动，配置方法为：
-
-（1）单击File|Setting菜单项，打开Settings选项卡；
-
-（2）在左侧的目录树中，展开Maven节点；
-
-（3）勾选Import Maven projects automatically选择项。
-
 
 alt + 1 左侧导航
-
 
 ctrl+alt+B 找到实现方法
 
