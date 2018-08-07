@@ -57,5 +57,12 @@ ToStringBuilder±È½ÏÊÊºÏÔÚ´òÈÕÖ¾Ê±£¬Êä³ö²ÎÊıµÄĞÅÏ¢£¬ÌØ±ğÊÇÔÚ²ÎÊıÎª¶ÔÏóÊ±£¬¸Ã¹¤¾ßÀ
  https://blog.csdn.net/yangfanend/article/details/6723568
 
 
+window ¹Ø±ÕÄ³¶Ë¿Ú
+²é¿´ËùÓĞ»î¶¯Á¬½Ó ¶Ë¿ÚÊ¹ÓÃÇé¿ö  netstat -na
+²é¿´Ö¸¶¨¶Ë¿ÚÁ¬½Ó               netstat -aon | findstr "8080"
+É±µô½ø³Ì                       taskkill /F /PID 28508
+
+
+
  NIO
  http://www.codeceo.com/article/java-nio.html
