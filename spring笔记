@@ -17,7 +17,7 @@ spring事物传播模式：
 
 @Transactional失效
 1、如果方法不是public会失效
-2、如果异常是check默认也不会滚，如果想check异常回归，注解上面写明异常类型
+2、如果异常是check默认也不会滚，如果想check异常回归，注解上面写明异常类型（Spring事务管理只对出现运行期异常进行回滚）
 3、数据库引擎要支持事物，如mysql 注意如果是myisam事物是不起作用的
 4、是否开启了对注解的解析
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
