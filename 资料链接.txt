@@ -24,3 +24,6 @@ https://www.jianshu.com/p/a842e5b5012e
 
 dubbo学习
 https://skyao.gitbooks.io/learning-microservice/content/implementation/framework/dubbo.html
+
+学习shiro框架
+http://jinnianshilongnian.iteye.com/blog/2018936
