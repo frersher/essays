@@ -1,0 +1,125 @@
+dubbo
+
+dubbo模块
+common:公共逻辑模块
+remoting：远程通信模块，dubbo协议实现
+rpc：远程调用模块，抽象各种协议，以及动态代理，只包含一对一调用，不关心集群管理。
+config：配置模块，对外的API，用户通过Config使用dubbo，dubbo对外隐藏细节
+registry：注册中心基于注册中心下发地址的集群方式，以及对各种注
+册中心的抽象。
+contain：容器，以简单的main方式加载spring启动
+cluster：集群，将多个服务提供方伪装为一个提供方，包括：负载均衡, 容错，路由等，集群的地址列表可以是静态配置的，也可以是由注册中心下发。
+
+
+
+注册中心
+基于dubbo协议给出默认一个注册中心实现SimpleRegistryService，只是简单地实现不支持集群。SimpleRegitryService在被订阅的时候，同时会refer引用调用方暴露的NitifyListener服务，当注册数据变动的时候会自动推送。
+
+生产者发布服务
+1. 指定了哪种的注册中心，是基于 dubbo 协议的，指定了注册中心的地址以及
+端口号
+
+2. 发布xxx 服务，服务的实现为 xxxImpl
+每个<dubbo:service/>在 spring 内部都会生成一个 ServiceBean 实例，
+ServiceBean 的实例化过程中调用 export 方法来暴露服务
+
+3. 遍历 registryUrls 向注册中心注册服务
+给每个 registryUrl 添加属性 key 为 export， value 为上面的发布服务
+url 得到如下 registryUrl
+
+4、由发布的服务实例，服务接口以及 registryUrl 为参数，通过代理工厂
+proxyFactory 获取 Invoker 对象，Invoker 对象是 dubbo 的核心模型，
+其他对象都向它靠拢或者转换成它。
+
+5、通过 Protocol 对象暴露服务 protocol.export(invoker)
+通过 DubboProtocol 暴露服务的监听(不是此节内容)
+通过 RegistryProtocol 将服务地址发布到注册中心，并订阅此服务
+
+RegistryProtocol.export(Invoker) 暴露服务
+
+1. 调 DubboProtocol 暴露服务的监听
+2.获取注册中心 getRegistry(Invoker)
+3.获取发布 url 就是 registryUrl 的 export 参数的值
+4.DubboRegistry.register(registryProviderUrl)
+通过注册器向注册中心注册服务
+5、构建订阅服务 overrideProviderUrl
+6、构建 OverrideListener 它实现与 NotifyLisener, 当注册中心的订阅
+的 url 发生变化时回调重新 export
+
+
+消费者引用服务
+1. 指定了哪种的注册中心，是基于 dubbo 协议的，指定了注册中心的地址以及
+端口号
+2. 引用远程 xxx 服务
+每个<dubbo:reference/>标签spring 加载的时候都会生成一个Referenc
+eBean。
+3.遍历 registryUrls 集合，使用 Protocol.refer(interface, regist
+ryUrl)的到可执行对象 invoker
+4.如果注册中心有多个的话， 通过集群策略 Cluser.join()将多个 invoke
+r 伪装成一个可执行 invoker， 这里默认使用 available 策略
+5.利用代理工厂生成代理对象 proxyFactory.getProxy(invoker)
+
+Protocol.refer 过程流程
+1. 根据传入的 registryUrl 是用来选择 RegistryProcol 它的协议属性是
+registry, 下面要选择使用哪种注册中心所以要根据 REGISTRY_KEY 属
+性重新设置 registrUrl
+dubbo://127.0.0.1:9098/com.alibaba.dubbo.registry.Regis
+tryService?application=demo-consumer&dubbo=2.0.0&pid=45
+24&refer=application%3Ddemo-consumer%26dubbo%3D2.0.0%26
+interface%3Dcom.alibaba.dubbo.demo.DemoService%26method
+s%3DsayHello%26pid%3D4524%26side%3Dconsumer%26timestamp
+%3D1415881461048&timestamp=1415881461113
+2. 根据 registrUrl 利用 RegistryFactory 获取注册器（过程跟暴露服务
+那边一样）， 这里是 dubbo 协议得到的是注册器是 DubboRegistry
+引用并订阅注册中心服务，
+3. 构建引用服务的 subscribeUrl
+consumer://10.5.24.221/com.alibaba.dubbo.demo.DemoServi
+ce?application=demo-consumer&category=consumers&check=f
+alse&dubbo=2.0.0&interface=com.alibaba.dubbo.demo.DemoS
+ervice&methods=sayHello&pid=8536&side=consumer&timestam
+p=1415945205031
+并通过注册器向注册中心注册消费方， 主要这里的 category 是 consume
+rs
+4.构建目录服务 RegistryDirectory,
+构建订阅消费者订阅 url，这里主要 category=providers 去注册中心寻
+找注册的服务提供者
+
+向注册中心订阅消费方，注册中心根据消费者传入的 url 找到匹配的服务提
+供者 url (注意：这里服务提供者没有设置 category，注册中心对于没有
+设置的默认取 providers 值)
+
+然后注册中心回调服务消费者暴露的回调接口来对服务提供者的服务进行引
+用 refer 生成对应的可执行对象 invoker。服务提供者与服务的消费建立
+连接
+
+5. 通过 Cluster 合并 directory 中的 invokers， 返回可执行对象
+invoker
+
+6. ProxyFactory.getProxy(invoker) 创建代理对象返回给业务方使用
+
+
+Zookeeper注册中心
+Zookeeper 对数据存储类似 linux 的目录结构，
+
+
+
+registry://127.0.0.1:9098/
+com.alibaba.dubbo.registry.RegistryService?
+application=demo-consumer
+&dubbo=2.0.0
+&pid=2484
+&refer=application
+%3Ddemo-consumer%26dubbo%3D2.0.0
+%26interface
+%3Dcom.alibaba.dubbo.demo.DemoService
+%26methods
+%3DsayHello
+%26pid
+%3D2484
+%26side
+%3Dconsumer
+%26timestamp
+%3D1415879965901
+&registry=dubbo
+&timestamp=141587999
+0670
