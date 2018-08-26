@@ -5,8 +5,7 @@ common:公共逻辑模块
 remoting：远程通信模块，dubbo协议实现
 rpc：远程调用模块，抽象各种协议，以及动态代理，只包含一对一调用，不关心集群管理。
 config：配置模块，对外的API，用户通过Config使用dubbo，dubbo对外隐藏细节
-registry：注册中心基于注册中心下发地址的集群方式，以及对各种注
-册中心的抽象。
+registry：注册中心基于注册中心下发地址的集群方式，以及对各种注册中心的抽象。
 contain：容器，以简单的main方式加载spring启动
 cluster：集群，将多个服务提供方伪装为一个提供方，包括：负载均衡, 容错，路由等，集群的地址列表可以是静态配置的，也可以是由注册中心下发。
 
@@ -103,23 +102,3 @@ Zookeeper 对数据存储类似 linux 的目录结构，
 
 
 
-registry://127.0.0.1:9098/
-com.alibaba.dubbo.registry.RegistryService?
-application=demo-consumer
-&dubbo=2.0.0
-&pid=2484
-&refer=application
-%3Ddemo-consumer%26dubbo%3D2.0.0
-%26interface
-%3Dcom.alibaba.dubbo.demo.DemoService
-%26methods
-%3DsayHello
-%26pid
-%3D2484
-%26side
-%3Dconsumer
-%26timestamp
-%3D1415879965901
-&registry=dubbo
-&timestamp=141587999
-0670

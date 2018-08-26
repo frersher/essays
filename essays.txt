@@ -70,10 +70,18 @@ jmap -heap pid
 
 
 垃圾回收器
-serial：单线程收集器，每次执行来及回收时需要停掉其他所有的工作线程，直到它收集完成。
-parNew：是serial是serial的多线程版本
-Parallel Scavenge:精确的控制吞吐量
+新生代
+serial：单线程收集器，每次执行来及回收时需要停掉其他所有的工作线程，直到它收集完成。（默认的新生代回收器，简单高效）
+parNew：是serial多线程版本
+Parallel Scavenge:精确的控制吞吐量（应用场景：高吞吐量为目标，减少垃圾回收的时间）
 
+老年代
+serial old：是serial的老年代版本，针对老年代，采用标记整理算法
+parallel old ：是parallel的老年代版本，采用标记整理算法
+CMS：基于标记清理算法（产生碎片），并发收集，停顿时间短。
+
+整堆回收
+G1：并发与并行，可以充分利用多cpu，可以独立管理整个Gc堆，不需要与其他回收器组合使用。
 
 内存泄漏
 不使用的对象内存没有别回收
@@ -98,7 +106,7 @@ Parallel Scavenge:精确的控制吞吐量
 
 
 
-  双亲委派模型：(定音战旗）
+    双亲委派模型：(定音战旗）
           启动类加载器
 
           扩展类加载器
@@ -436,7 +444,6 @@ Redis 新版本中出现set(key,1,30,NX) 原子操作
 二、使用数据库乐观锁
 确定：分布式情况下，数据库性能一般是瓶颈。
 
-
 守护线程
 Gc是一个典型的守护线程
 
@@ -450,7 +457,12 @@ mysql优化
 1、优化sql和索引
 2、加缓存redis、memacached
 3、用mysql自带的分区
-4、读写分离
+4、读写分离：
+数据同步：    
+    Mysql，它自己有一个master-slave功能，可以实现主从数据库的自动同步。
+路由规则：
+a)使用编码的方式，在DAO层区分读写方法，分别调用不同数据库。    
+b）使用中间件
 5、垂直拆分
 6、水平拆分
 
@@ -740,3 +752,29 @@ registry：注册中心基于注册中心下发地址的集群方式，以及对
 册中心的抽象。
 contain：容器，以简单的main方式加载spring启动
 cluster：集群，将多个服务提供方伪装为一个提供方，包括：负载均衡, 容错，路由等，集群的地址列表可以是静态配置的，也可以是由注册中心下发。
+
+
+
+Executor框架
+jdk把工单元和任务执行分离，工作单元包括callable、runnable，而执行机制由Executor提供
+
+Executor由3部分组成：
+1、任务：被执行的任务需要实现3个接口：Runnable、callable接口。runable不会返回结果、callable可以返回结果，所以如果提交的如果是runnable的任务，返回的Future.get()返回null
+2、任务的执行：实现的ExecuteService接口的ThreadPollService、ScheduleTHreadPollService
+3、异步计算结果：接口Fature和实现Future接口的FutureTask类
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
