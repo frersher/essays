@@ -68,3 +68,6 @@ Pagination.js
 
  NIO
  http://www.codeceo.com/article/java-nio.html
+
+'+escape(tableName)+'
+ 

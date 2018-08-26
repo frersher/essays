@@ -764,6 +764,33 @@ Executor由3部分组成：
 3、异步计算结果：接口Fature和实现Future接口的FutureTask类
 
 
+线上问题排查：
+jstack
+通过ps、jps找出processId，可以通过jstack -l <pid> > stack_<pid>.log，将线程栈信息打印到文件中，查看线程的执行情况。
+遇到应用进程占用cpu较多，可以通过top -p pid-H获取到是哪个线程消耗cpu较多，然后将线程id转换成十六进制，从线程栈文件找出对应的线程正在做什么，排查死锁问题，则直接查找线程栈文件，基本可以找出来大部分的死锁的问题。
+
+jmap
+通过jmap可以打印出jvm堆中对象的数量及引用关系，在dump堆之后可以通过MAT或者HA分析出哪个对象实例占用较多，是否有内存泄露的情况。
+常用的用法有：
+jmap -histo:live <pid>，这种用法会强制执行一次fgc；
+jmap -heap <pid>，直接打印出各对象实例的分布情况；
+jmap -dump:[live],format=b,file=dump.bin <pid>，将heap dump到指定文件中
+
+jstat
+jstat在排查gc问题时真的很好用，它能够提供一些统计信息，包括gc次数，gc原因，内存占用等。还是先来看一下jstat的用法吧：
+比较常用的用法有：
+jstat -gcutil <pid> [interval]，每隔interval（ms）打印出进程pid的gc情况；
+jstat -gccause <pid> [interval]，对于gcutil选项，该选项会将gc的原因列出来；
+
+jinfo
+jinfo主要用来查询jvm进程的运行时的jvm参数，以及修改jvm运行时的参数，
+主要用法如下：
+jinfo -flag <name> <pid>，查询进程pid name的参数值；
+jinfo -flag <name>=<value> <pid>，设置jvm参数name的值为value；
+jinfo -flag [+|-]<name>,启用某个参数或禁用某个参数。
+
+
+
 
 
 

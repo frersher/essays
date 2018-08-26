@@ -31,3 +31,30 @@ spring本身没有事物，所有的事物操作是基于数据库的
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 5、spring 是否扫描到这个包
 
+
+核心机制分析
+
+设计模式：
+   工厂模式：private static final Protocol protocol =
+			ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension();
+			Dubbo 里有很多这种代码。这也是一种工厂模式，只是实现类的获取采用了 jdkspi 的机
+			制。这么实现的优点是可扩展性强，想要扩展实现，只需要在 classpath 下增加个文件就可
+			以了，代码零侵入。另外，像上面的 Adaptive 实现，可以做到调用时动态决定调用哪个实
+			现，但是由于这种实现采用了动态代理，会造成代码调试比较麻烦，需要分析出实际调用的
+			实现类。
+   观察者模式：cusumer在订阅服务时，实现notifyListener，开启listener注册中心会每 5 秒定时检查是否有服
+				务更新，如果有更新，向该服务的提供者发送一个 notify 消息， provider 接受到 notify 消息
+				后，即运行 NotifyListener 的 notify 方法，执行监听器方法。
+   动态代理模式：
+			   Dubbo 扩展 jdkspi 的类 ExtensionLoader 的 Adaptive 实现是典型的动态代理实现。 Dubbo
+			需要灵活地控制实现类，即在调用阶段动态地根据参数决定调用哪个实现类，所以采用先生
+			成代理类的方法，能够做到灵活的调用。生成代理类的代码是 ExtensionLoader 的
+			createAdaptiveExtensionClassCode 方法。代理类的主要逻辑是，获取 URL 参数中指定参数的
+			值作为获取实现类的 key
+
+
+bean加载
+扩展点机制
+动态代理
+远程调用
+

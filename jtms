@@ -1,0 +1,100 @@
+volatile和synchronized的区别
+	volatile，可见性，放主存
+	synchronized，保证原子性
+hashmap和concurrentHashMap和HashTable
+写一个sql解析器
+	使用访问者模式，好处
+	静态分派以及动态分派
+	访问者模式使用伪动态双分派
+两种解决尾差方法
+	1.分子/分母
+	2.分子/可变分母
+ACID
+数据库索引
+聚合
+
+线程池的核心参数，
+核心线程数
+任务队列容量
+最大线程数
+线程空闲时间
+
+Future对象
+接受异步线程的返回结果，get()是阻塞方法，可以用isDone判断是否完成
+
+
+jvm参数
+xms 初始化堆大小
+xmx 最大堆的大小
+xmn 年轻带大小
+-XX:MinHeapFreeRatio 参数用来设置堆空间最小空闲比例
+-XX:+PrintGCDetails  打印对信息
+
+稳定的堆大小的方法是使-Xms 和-Xmx 的大小一致，可以减少GC的次数，会增加每次Gc时间
+，不固定堆的大小会是堆大小在一个区间里震荡，GC应对一个较小的堆，增加GC的速度
+
+
+jvm调优
+gc
+tomcat调优
+可重入锁
+	https://www.cnblogs.com/dj3839/p/6580765.html
+load指标
+SOA下服务调用超时(幂等)如何处理
+集群场景下的并发控制
+生产者消费者模型
+java内存模型、垃圾收集、classload
+
+spring声明式事务
+
+
+
+threadLocal
+tcp三次握手
+StringBuffer和StringBuilder
+equals和==的区别
+设计模式
+反射
+事务
+两阶段提交
+tps qps rt
+吞吐量、并发量、响应时间
+
+
+CMS算法
+jvm性能调优
+java8新特性
+乐观锁悲观锁
+Java堆内存调整参数
+堆内存的各个区域都会有一个可变伸缩区。
+-Xms(初始化内存):默认为物理内存1/64
+-Xmx(最大内存):默认为物理内存1/4
+使用Runtime类获取内存的整体信息
+最好使用MaxMemory和TotalMemory保持一致。
+
+PrintGCDetails 观察GC的详细日志
+年轻代占3/8
+年老代占5/8
+
+元空间是物理内存，不属于java堆内存
+java -Xmx4G -Xms4G -XX:+PrintGCDetails TestDemo
+如何判断单向链表有环
+	两个指针，一个fast一个low，相遇代表有，否则其中一个先碰到null
+runnable、callable
+索引
+	聚集索引(mysql innordb、存具体数据)非聚集索引(存数据行位置)
+
+spring代理方式
+	jdk动态代理，cglib字节码代理
+
+Object方法
+equals
+toString
+getClass
+hashCode
+wait
+notify
+
+
+springboot starter实现原理
+一致性hash
