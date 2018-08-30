@@ -729,17 +729,6 @@ java内存模型中围绕着
 有序性：volatile禁止指令重排，synchronize一个变量在某一时刻只允许一个线程访问
 
 
-dubbo模块
-common:公共逻辑模块
-remoting：远程通信模块，dubbo协议实现
-rpc：远程调用模块，抽象各种协议，以及动态代理，只包含一对一调用，不关心集群管理。
-config：配置模块，对外的API，用户通过Config使用dubbo，dubbo对外隐藏细节
-registry：注册中心基于注册中心下发地址的集群方式，以及对各种注
-册中心的抽象。
-contain：容器，以简单的main方式加载spring启动
-cluster：集群，将多个服务提供方伪装为一个提供方，包括：负载均衡, 容错，路由等，集群的地址列表可以是静态配置的，也可以是由注册中心下发。
-
-
 
 Executor框架
 jdk把工单元和任务执行分离，工作单元包括callable、runnable，而执行机制由Executor提供
