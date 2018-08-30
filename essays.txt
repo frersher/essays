@@ -424,7 +424,7 @@ mysql最基本获取数据的方式是顺序查找时间复杂度是O(n)，如�
 Redis 新版本中出现set(key,1,30,NX) 原子操作
 2.误删：如果线程1设置了30s，30s没有执行完，线程2进入，然后线程1执行完了，把线程2的锁del了
 解决误删有两个方法：a)把线程id作为Value，删除之前比较一下value
-                    b)增加一个守护线程，在快超时的时候增加过期时间
+                 b)增加一个守护线程，在快超时的时候增加过期时间
 
 
 二、使用数据库乐观锁
@@ -790,6 +790,27 @@ a）dump内存
 b）看一下GC日志
 如果没有任何JVM参数设置，gc日志默认打印在stdout.log文件里，里面可能会打其他的日志，而且GC日志也不会输出时间，所以在JVM启动参数里最好加以下命令，规范下GC日志输出到/home/admin/logs/gc.log，并且打印GC时间。
 -XX:HeapDumpPath=/home/admin/logs -Xloggc:/home/admin/logs/gc.log  -XX:+PrintGCDetails -XX:+PrintGCDateStamps
+ses
+
+
+
+Webx Framework将一个WEB应用分解成多个小应用模块：app1、app2，当然名字可以任意取。
+每个小应用模块独享一个Spring Sub Context子容器。两个子容器之间的beans无法互相注入。
+所有小应用模块共享一个Spring Root Context根容器。根容器中的bean可被注入到子容器的bean中；反之不可以。将一个大的应用分解成若干个小应用模块，并使它们的配置文件相对独立，这是一种很不错的开发实践。
+
+
+
+
+springMvc 
+角色：控制器、验证器、模型对象、Servlet分发器、处理映射器、视图解析器
+
+
+session和cookie的区别
+1，session 在服务器端，cookie 在客户端（浏览器）
+2，session 默认被存在在服务器的一个文件里（不是内存）
+3，session 的运行依赖 session id，而 session id 是存在 cookie 中的，也就是说，如果浏览器禁用了 cookie ，同时 session 也会失效（但是可以通过其它方式实现，比如在 url 中传递 session_id）
+4，session 可以放在 文件、数据库、或内存中都可以。
+5，用户验证这种场合一般会用 session
 
 
 
