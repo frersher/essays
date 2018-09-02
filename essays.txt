@@ -144,8 +144,6 @@ CachedThreadPool：为每一个任务创建线程
 FixedThreadPool：一次性的预执行代替了高昂的线程分配，同时也限制了线程的数量
 SingleThreadPool：相当于线程数为1的FixThreadPool
 
-Runnable是执行工作的福利任务，没有返回值，如果希望执行任务后返回值，可以实现Callable接口
-
 
 线程的优先级
 可以用getPriority、setPriority查看和设置
@@ -789,8 +787,7 @@ a）dump内存
 
 b）看一下GC日志
 如果没有任何JVM参数设置，gc日志默认打印在stdout.log文件里，里面可能会打其他的日志，而且GC日志也不会输出时间，所以在JVM启动参数里最好加以下命令，规范下GC日志输出到/home/admin/logs/gc.log，并且打印GC时间。
--XX:HeapDumpPath=/home/admin/logs -Xloggc:/home/admin/logs/gc.log  -XX:+PrintGCDetails -XX:+PrintGCDateStamps
-ses
+-XX:HeapDumpPath=/home/admin/logs -Xloggc:/home/admin/logs/gc.log  -XX:+PrintGCDetails -XX:+PrintGCDateStampsses
 
 
 
@@ -813,7 +810,14 @@ session和cookie的区别
 5，用户验证这种场合一般会用 session
 
 
+sleep和wait的区别
+1、sleep是Thread的方法wait是Object的方法
+2、wait必须要在同步方法或同步方法块中使用、sleep没有限制
+3、wait会释放占有的对象锁，使得线程可以进入线程池等待下一次获取资源，而sleep只会让出cpu并没有释放锁
+4、sleep到达休眠时间会再次获取cpu再次执行吗，而wait必须等待notify通知
 
+yield和sleep
+二者都会让出cpu，但是yield让出后只有优先级一样的线程可以获取资源
 
 1、如何实现阻塞队列
 2、redis中的SortedSet如何实现有序的
