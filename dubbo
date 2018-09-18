@@ -54,7 +54,7 @@ proxyFactory 获取 Invoker 对象，Invoker 对象是 dubbo 的核心模型，
 
 RegistryProtocol.export(Invoker) 暴露服务
 
-1. 调 DubboProtocol 暴露服务的监听
+1.调 DubboProtocol 暴露服务的监听
 2.获取注册中心 getRegistry(Invoker)
 3.获取发布 url 就是 registryUrl 的 export 参数的值
 4.DubboRegistry.register(registryProviderUrl)

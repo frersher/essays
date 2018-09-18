@@ -1,0 +1,53 @@
+
+系统：
+Command-H  隐藏最前面的应用的窗口。要查看最前面的应用但隐藏所有其他应用，请按 Command-Option-H。
+Ctrl+Cmd+Q 的快速锁屏快捷键
+Option-Command-Esc	强制退出：选择要强制退出的应用。或者，按住 Command-Shift-Option-Esc 3 秒钟来仅强制最前面的应用退出。
+Command-W    关闭窗口    
+Option-Command-W    关闭所有窗口
+Command-Shift-U    打开实用工具
+Command-e 推出
+Command-shift-g  前往文件夹
+Command-m 窗口最小化
+option+Command+C 拷贝文件路径
+Command+control+f 进入、退出全屏
+Command+alt+ESC   任务管理器
+Command-Shift-N   新建文件夹
+
+
+
+浏览器：
+
+safari
+Command+l     选中地址栏
+Command+数字  Command+tab  切换tab页
+
+Chrome：
+开发者工具：option＋command＋i
+javascript控制台：option＋command＋j
+或者按option＋command＋c也可以打开
+Command+shift+n 打开无痕模式
+Ctrl+L          选中地址内容
+Ctrl+Shift+j    打开下载页
+Command+[ ]     网页前进、后退
+Ctrl+Shift+T    重新打开上次关闭的标签页
+Ctrl+Tab        切换到下一个标签页
+Option+Command+B      收藏夹
+
+
+IDEA
+command + j   main方法提示
+sout          输出提示
+control+enter 构造方法生成
+control+shfit+r 全局查找
+
+
+sublime
+control+shift+k 删除一行
+
+
+
+smartGit过期删除settings文件
+/Users/cb/Library/Preferences/SmartGit/18.1/settings.xml
+
+
