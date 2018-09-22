@@ -1,0 +1,48 @@
+并发编程
+Executor框架
+jdk把工单元和任务执行分离，工作单元包括callable、runnable，而执行机制由Executor提供
+
+Executor框架由三部分组成
+1、任务：被执行的任务需要实现3个接口：Runnable、callable接口。runable不会返回结果、callable可以返回结果，所以如果提交的如果是runnable的任务，返回的Future.get()返回null
+2、任务的执行：包括任务执行机制的核心接口Executor，以及继承自Executor的ExecutorService接口。有两个关键的类ThreadPoolEexcutor、ScheduledThreadPoolExecutor
+3、异步计算的结果：包括future、future接口的实现类futureTask
+
+futureTask的实现是基于AQS，java.util.concurrnet中的很多可阻塞的类都是基于AQS实现的，AQS是一个同步框架，通过原子性管理同步状态、阻塞和唤醒线程，以及维护被阻塞线程的队列。基于AQS实现的有ReentranLock、Semaphore、countDownLatch、FutureTask
+
+
+ThreadPoolExecutor 是线程的实现类，也是Executor框架最核心的类
+corePool：核心线程池大小
+maximumPool：最大线程池大小
+BlockingQueue：任务工作队列
+RejectedExecutionHandler：当ThreadPoolExecutor关闭或最大线程池已经满了，executor将调用的handler
+
+
+ThreadLocal
+ThreadLocal设计的初衷：提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。
+实现：
+  1.每个ThreadLocal类创建一个Map,然后用线程的id作为key，实列对象作为value值，这样可以做到线程隔离的效果（最简单的实现方式）
+
+
+synchronized和lock的区别
+1）synchronized基于jvm实现的lock通过java代码实现的
+2）synchronized假设A线程获得锁，B线程等待。如果A线程阻塞，B线程会一直等待，lock分情况而定，Lock有多个锁获取的方式，具体下面会说道，大致就是可以尝试获得锁，线程可以不用一直等待
+
+
+ConcurrentHashMap
+1）相对于HashTable  整个加锁的形式，采用了分段加锁的方式，只有hash值在同一个段中的数据才会发生竞争，如果分n段，理论上最高的并发度也是n。
+2）ConcurrentHashMap的读取并发，因为在读取的大多数时候都没有用到锁定。
+3) segment里面才是真正的hashtable
+4)ConcurrentHashMap的get的操作不需要加锁，原因是它的get方法里将使用到的共享变量都定义成了volatile，根据Java内存模
+型的happen before原则，对volatile字段的写入操作先于读操作
+
+
+ConcurrentHashMap中的HashEntry相对于HashMap中的Entry有一定的差异性：HashEntry中的value以及next都被volatile修饰，这样在多线程读写过程中能够保持它们的可见性，
+
+
+重入锁
+又叫递归锁，指外层获取锁之后，内层的递归函数任有获取锁的代码，但受不影响。可重入锁的最大作用是避免死锁
+自旋锁：不可重入锁
+
+锁实现：
+AQS构建锁和同步器的框架，AQS是通过双向的FIFO同步队列来完成同步状态的管理，当有线程获取锁失败后，就被添加到队列末尾
+AQS的模板方法acquire通过调用子类自定义实现的tryAcquire获取同步状态失败后->将线程构造成Node节点(addWaiter)->将Node节点添加到同步队列对尾(addWaiter)->节点以自旋的方法获取同步状态(acquirQueued)。在节点自旋获取同步状态时，只有其前驱节点是头节点的时候才会尝试获取同步状态，如果该节点的前驱不是头节点或者该节点的前驱节点是头节点单获取同步状态失败，则判断当前线程需要阻塞，如果需要阻塞则需要被唤醒过后才返回。
