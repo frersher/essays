@@ -40,6 +40,19 @@ command + j   main方法提示
 sout          输出提示
 control+enter 构造方法生成
 control+shfit+r 全局查找
+shifit+command+option+c 拷贝方法完整名称
+sout  输出
+
+
+debugger
+F8下一步
+F9 结束断点 下一个短点
+F7进入方法体
+Shift+F8 跳回到原来的地方
+Alt+F8 可以通过在 Debug 的状态下，选中对象，弹出可输入计算表达式调试框，查看该输入内容的调试结果 
+
+
+
 
 
 sublime
