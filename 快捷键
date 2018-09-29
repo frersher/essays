@@ -42,7 +42,7 @@ control+enter 构造方法生成
 control+shfit+r 全局查找
 shifit+command+option+c 拷贝方法完整名称
 sout  输出
-
+option+command+m 方法抽取
 
 
 debugger
