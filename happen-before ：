@@ -1,0 +1,15 @@
+happen-before ：
+如果一个操作结果需要对另一个操作可见，那么这两个操作之间必须要存在happen-before的关系，可以是单线程，也可以是多线程。
+规则如下：
+1、程序顺序规则：一个线程中每一个操作，happen-before于该线程任意一个后续操作
+2、监视器锁规则：对于锁的解锁操作，happen-before于随后对于这个锁的加锁操作
+3、volatile域规则：对于volatile修饰变量的写操作，happen-before于任意线程后续的读操作
+4、传递性..
+5、startr规则：如果线程A执行操作TheadB.start(启动B线程)，那么A线程的ThreadB.start操做happnes-before于线程B中的任意操作
+6、join规则：如果线程A执行THreadB.join并返回成功，那么线程B中的操作happens-before于线程A从THreadB.join操作成功返回
+（join：让父线程等待子线程结束之后才能继续运行）
+
+
+
+Ip地址和端口号就组成了所谓的Socket
+java中有一个InterAddress

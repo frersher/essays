@@ -21,7 +21,7 @@ Command-Shift-N   新建文件夹
 safari
 Command+l     选中地址栏
 Command+数字  Command+tab  切换tab页
-
+option+command+L 格式化代码
 Chrome：
 开发者工具：option＋command＋i
 javascript控制台：option＋command＋j
@@ -33,6 +33,7 @@ Command+[ ]     网页前进、后退
 Ctrl+Shift+T    重新打开上次关闭的标签页
 Ctrl+Tab        切换到下一个标签页
 Option+Command+B      收藏夹
+command+L        选中地址栏
 
 
 IDEA
@@ -40,10 +41,11 @@ command + j   main方法提示
 sout          输出提示
 control+enter 构造方法生成
 control+shfit+r 全局查找
+⌃↩     生成getter、setter方法
+option+command+L 格式化代码
 shifit+command+option+c 拷贝方法完整名称
 sout  输出
 option+command+m 方法抽取
-
 
 debugger
 F8下一步
