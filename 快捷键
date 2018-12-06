@@ -46,6 +46,10 @@ option+command+L 格式化代码
 shifit+command+option+c 拷贝方法完整名称
 sout  输出
 option+command+m 方法抽取
+control+ 空格 代码提示
+shifit+command+enter 代码结尾补全
+shifit+control+j  代码拼接成一行
+
 
 debugger
 F8下一步
@@ -65,5 +69,8 @@ control+shift+k 删除一行
 
 smartGit过期删除settings文件
 /Users/cb/Library/Preferences/SmartGit/18.1/settings.xml
+
+navicat破解
+https://www.jianshu.com/p/f3ef78deadaa
 
 
