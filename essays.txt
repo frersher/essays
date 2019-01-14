@@ -68,7 +68,7 @@ JDK1.2 将对象引用分为4种：强引用、软引用、弱引用、虚引用
 
 *  老年代   
    虚拟机给每个对象定义一个对象年龄，如果Eden的对象经过一次GC还存活，并且可以被survivor容纳的话，将对象移到survivor，并将年龄设为1，对象在survivor中每经过一次GC年龄加一，到一定阶段对象会被放入老年代，默认是15，可以通过jvm参数修改
-  如果survivor中相同年龄的对象占survivor空间的一半，年龄大于或等于这个年龄的对象也可以进入老年代
+    如果survivor中相同年龄的对象占survivor空间的一半，年龄大于或等于这个年龄的对象也可以进入老年代
 
 
 回收策略（避免频繁的fullGc）
@@ -104,7 +104,7 @@ G1：并发与并行，可以充分利用多cpu，可以独立管理整个Gc堆�
 内存泄露 memory leak，是指程序在申请内存后，无法释放已申请的内存空间，一次内存泄露危害可以忽略，但内存泄露堆积后果很严重，无论多少内存,迟早会被占光。
 memory leak会最终会导致out of memory！
 
-
+JVM 设置参数 -XX:+HeapDumpOnOutOfMemoryError。让 JVM 碰到 OOM 的时候，输出 dump 信息。
 
 
 
@@ -843,6 +843,20 @@ springBoot和传统的架构的区别
 static能不能声明为事物
 
 
+
+* countDownLatch：允许一个或多个线程等待某些操心完成
+
+* CyclicBarrier：一种辅助性的同步结构，允许多个线程等待到达某个屏障
+
+* Semaphore：Java版本的信号量实现。
+
+  countDownLatch和CyclicBarrier的区别：前者是不可重置的，所以无法重用；而后者没有这种限制，可以重用。
+
+* CountDownLatch和CyclicBarrier都能够实现线程之间的等待，只不过它们侧重点不同：
+  CountDownLatch一般用于某个线程A等待若干个其他线程执行完任务之后，它才执行；
+  而CyclicBarrier一般用于一组线程互相等待至某个状态，然后这一组线程再同时执行；
+  另外，CountDownLatch是不能够重用的，而CyclicBarrier是可以重用的。
+  2）Semaphore其实和锁有点类似，它一般用于控制对某组资源的访问权限。
 
 
 
