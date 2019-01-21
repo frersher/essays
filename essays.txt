@@ -29,21 +29,22 @@ JDK1.2 将对象引用分为4种：强引用、软引用、弱引用、虚引用
 
 * 主要分为三块：堆、栈、方法区
 
-  1、堆：是内存中最大的一块，主要分为新生代、老年代。新生代又分为Eden空间、From Survivor空间、To Survivor空间，比例按照8:1:1
+  1、堆：是内存中最大的一块，主要分为新生代、老年代。新生代又分为Eden空间、From Survivor空间、To Survivor空间，比例按照8:1:1；创建的对象直接放在堆上，被所有的线程共享
   如果堆上没有内存完成实例分配，且堆内存无法扩展时，则会出现OutOfMemoryError
   2、方法区：用于存储已被虚拟机加载的类的信息、常量、静态变量
   3、程序计数器：是一块较小的内存空间，它的作用可以看做是当前线程所执行的字节码的行号指示器
 
-  4、栈：当前运行Java方法的地址
+  4、栈：每个线程创建时都会创建一个虚拟机栈，内部保存着栈帧当前运行Java方法的地址
 
   堆和方法区是线程共享的，其他的时是线程独有的
 
+  ![image-20190121214233006](/Users/cb/Library/Application Support/typora-user-images/image-20190121214233006.png)
 
 **对象的内部布局**
 
 * 对象头
-     a)标记字段：存储对象自身运行时的数据，hashCode、GC分代年龄、锁状态标志、持有锁的线程等
-     b)类型指针：虚拟机通过类型指针确定是哪个对象的实例
+     a)存储对象自身运行时的数据，hashCode、GC分代年龄、锁状态标志、持有锁的线程等
+     b)类型指针，虚拟机通过类型指针确定是哪个对象的实例
 * 实例数据：对象正常存储的有效信息，也就是对象中各种类型的字段内容
 * 对齐填充：不是必然的，没有特殊的含义，仅仅是占位符的作用
 
@@ -150,6 +151,25 @@ synchronized
 Thread.yield()
 CPU从一个线程转移到另一个线程
 
+Executor：一个接口，其定义了一个接收Runnable对象的方法executor，其方法签名为executor(Runnable command),
+
+ExecutorService：是一个比Executor使用更广泛的子类接口，其提供了生命周期管理的方法，以及可跟踪一个或多个异步任务执行状况返回Future的方法
+
+AbstractExecutorService：ExecutorService执行方法的默认实现
+
+ScheduledExecutorService：一个可定时调度任务的接口
+
+ScheduledThreadPoolExecutor：ScheduledExecutorService的实现，一个可定时调度任务的线程池
+
+ThreadPoolExecutor：线程池，可以通过调用Executors以下静态工厂方法来创建线程池并返回一个ExecutorService对象：
+
+CachedThreadPool：为每一个任务创建线程
+FixedThreadPool：一次性的预执行代替了高昂的线程分配，同时也限制了线程的数量
+SingleThreadPool：相当于线程数为1的FixThreadPool
+
+
+线程的优先级
+可以用getPriority、setPriority查看和设置
 
 
 HashMap
@@ -269,25 +289,6 @@ java栈         存储局部变量，如果变量是基本类型存储值如果�
 
 
 
-**线程池**是一个容易让人误解的术语，ExecutorService除了提供“池”的功能还有更全面的线程管理、任务提交等方法
-
-![img](https://static001.geekbang.org/resource/image/fc/5b/fc70c37867c7fbfb672fa3e37fe14b5b.png)
-
-
-
-* Executor:一个基础接口，设计的初衷是将任务的提交和执行的细节解耦
-
-* ExecutorService：更加完善不仅提供service的管理功能，比如shtdown等方法，也提供了更加全面的任务提交机制，如返回Future而不是void的submit方法。
-
-  ```java
-  <T> Future<T> submit(Callable<T> task);
-  ```
-
-  注意，这个例子输入的可是Callable，它解决了 Runnable无法返回结果的困扰
-
-
-
-
 线程池ThreadPoolExecutor、
 ThreadPoolExecutor继承AbstractExecutorService
 AbstractExecutorService 实现 ExecutorService 接口
@@ -374,6 +375,7 @@ Set
 Sorted set
 pub/sub
 Transactions
+
 
 mysql性能调优
 1.最基本的调优是使表在磁盘中占的空间尽可能的小，在更小的列上做索引也会占更少的资源
