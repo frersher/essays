@@ -14,7 +14,9 @@ ThreadPoolExecutor 是线程的实现类，也是Executor框架最核心的类
 corePool：核心线程池大小
 maximumPool：最大线程池大小
 BlockingQueue：任务工作队列
+keepAliveTime：线程活跃时间，如果线程数量大于核心线程数量，多余线程空闲时间超时候被销毁
 RejectedExecutionHandler：当ThreadPoolExecutor关闭或最大线程池已经满了，executor将调用的handler
+ThreadFactory：使用ThreadFactory创建线程，默认使用defaultThreadFactory
 
 
 ThreadLocal
@@ -23,9 +25,33 @@ ThreadLocal设计的初衷：提供线程内部的局部变量，在本线程内
   1.每个ThreadLocal类创建一个Map,然后用线程的id作为key，实列对象作为value值，这样可以做到线程隔离的效果（最简单的实现方式）
 
 
+Executor：一个接口，其定义了一个接收Runnable对象的方法executor，其方法签名为executor(Runnable command),
+
+ExecutorService：是一个比Executor使用更广泛的子类接口，其提供了生命周期管理的方法，以及可跟踪一个或多个异步任务执行状况返回Future的方法
+
+AbstractExecutorService：ExecutorService执行方法的默认实现
+
+ScheduledExecutorService：一个可定时调度任务的接口
+
+ScheduledThreadPoolExecutor：ScheduledExecutorService的实现，一个可定时调度任务的线程池
+
+ThreadPoolExecutor：线程池，可以通过调用Executors以下静态工厂方法来创建线程池并返回一个ExecutorService对象：
+
+CachedThreadPool：为每一个任务创建线程
+FixedThreadPool：一次性的预执行代替了高昂的线程分配，同时也限制了线程的数量
+SingleThreadPool：相当于线程数为1的FixThreadPool
+
+
+线程的优先级
+可以用getPriority、setPriority查看和设置
+
+
 synchronized和lock的区别
 1）synchronized基于jvm实现的lock通过java代码实现的
 2）synchronized假设A线程获得锁，B线程等待。如果A线程阻塞，B线程会一直等待，lock分情况而定，Lock有多个锁获取的方式，具体下面会说道，大致就是可以尝试获得锁，线程可以不用一直等待
+3）lock知道线程有没有成功的获取锁（trylock方法是有返回值的），synchronized无法感知
+4）lock必须手动释放锁，synchronized不需要
+
 
 
 ConcurrentHashMap
