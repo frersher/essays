@@ -10,16 +10,36 @@ Executor框架由三部分组成
 futureTask的实现是基于AQS，java.util.concurrnet中的很多可阻塞的类都是基于AQS实现的，AQS是一个同步框架，通过原子性管理同步状态、阻塞和唤醒线程，以及维护被阻塞线程的队列。基于AQS实现的有ReentranLock、Semaphore、countDownLatch、FutureTask
 
 
-ThreadPoolExecutor 是线程的实现类，也是Executor框架最核心的类
-corePool：核心线程池大小
-maximumPool：最大线程池大小
-BlockingQueue：任务工作队列
-keepAliveTime：线程活跃时间，如果线程数量大于核心线程数量，多余线程空闲时间超时候被销毁
-RejectedExecutionHandler：当ThreadPoolExecutor关闭或最大线程池已经满了，executor将调用的handler
-ThreadFactory：使用ThreadFactory创建线程，默认使用defaultThreadFactory
+
+**ThreadPoolExecutor 是线程的实现类，也是Executor框架最核心的类**
+
+ThreadPoolExecutor->AbstractExcutorService->ExcutorService->Excutor   继承关系
+
+默认情况下线程池创建完成后并没有线程，而是等到任务来了之后去创建线程  当线程池中的线程数目达到corePoolSize后，就会把到达的任务放到缓存队列当中；
+
+* corePool：核心线程池大小
+* maximumPool：最大线程池大小
+* BlockingQueue：任务工作队列
+* keepAliveTime：线程活跃时间，如果线程数量大于核心线程数量，多余线程空闲时间超时候被销毁
+* RejectedExecutionHandler：当ThreadPoolExecutor关闭或最大线程池已经满了，executor将调用的handler
+* ThreadFactory：使用ThreadFactory创建线程，默认使用defaultThreadFactory
 
 
-ThreadLocal
+
+Excutor是一个顶层接口只有一个execute方法，返回值为void，参数为Runnable类型，然后ExecutorService接口继承了Executor接口，并声明了一些方法：submit、invokeAll、invokeAny以及shutDown等；
+
+要知道**任务提交给线程池之后的处理策略**，这里总结一下主要有4点：
+
+- 如果当前线程池中的线程数目小于corePoolSize，则每来一个任务，就会创建一个线程去执行这个任务；
+- 如果当前线程池中的线程数目>=corePoolSize，则每来一个任务，会尝试将其添加到任务缓存队列当中，若添加成功，则该任务会等待空闲线程将其取出去执行；若添加失败（一般来说是任务缓存队列已满），则会尝试创建新的线程去执行这个任务；
+- 如果当前线程池中的线程数目达到maximumPoolSize，则会采取任务拒绝策略进行处理；
+- 如果线程池中的线程数量大于 corePoolSize时，如果某线程空闲时间超过keepAliveTime，线程将被终止，直至线程池中的线程数目不大于corePoolSize；如果允许为核心池中的线程设置存活时间，那么核心池中的线程空闲时间超过keepAliveTime，线程也会被终止。
+
+http://www.cnblogs.com/dolphin0520/p/3932921.html
+
+
+
+**ThreadLocal**
 ThreadLocal设计的初衷：提供线程内部的局部变量，在本线程内随时随地可取，隔离其他线程。
 实现：
   1.每个ThreadLocal类创建一个Map,然后用线程的id作为key，实列对象作为value值，这样可以做到线程隔离的效果（最简单的实现方式）
@@ -41,10 +61,8 @@ CachedThreadPool：为每一个任务创建线程
 FixedThreadPool：一次性的预执行代替了高昂的线程分配，同时也限制了线程的数量
 SingleThreadPool：相当于线程数为1的FixThreadPool
 
-
 线程的优先级
 可以用getPriority、setPriority查看和设置
-
 
 synchronized和lock的区别
 1）synchronized基于jvm实现的lock通过java代码实现的
@@ -58,8 +76,7 @@ ConcurrentHashMap
 1）相对于HashTable  整个加锁的形式，采用了分段加锁的方式，只有hash值在同一个段中的数据才会发生竞争，如果分n段，理论上最高的并发度也是n。
 2）ConcurrentHashMap的读取并发，因为在读取的大多数时候都没有用到锁定。
 3) segment里面才是真正的hashtable
-4)ConcurrentHashMap的get的操作不需要加锁，原因是它的get方法里将使用到的共享变量都定义成了volatile，根据Java内存模
-型的happen before原则，对volatile字段的写入操作先于读操作
+4)ConcurrentHashMap的get的操作不需要加锁，原因是它的get方法里将使用到的共享变量都定义成了volatile，根据Java内存模型的happen before原则，对volatile字段的写入操作先于读操作
 
 
 ConcurrentHashMap中的HashEntry相对于HashMap中的Entry有一定的差异性：HashEntry中的value以及next都被volatile修饰，这样在多线程读写过程中能够保持它们的可见性，
