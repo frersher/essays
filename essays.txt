@@ -860,16 +860,7 @@ java.util.concurrent包下，利用它可以实现类似计数器的功能。比
 
 
 
-#### servlet
 
-* 当第一次调用某个servlet容器时，需要在入其servlet类，并调用其init方法
-* 针对每一个request请求，创建一个javax.servlet.ServletRequest、javax.servlet.ServletResponse实例
-* 调用servlet的service方法，将servletRequest、ServletResponse作为参数载入
-* 当关闭servlet类时，调用其destory方法，并卸载servlet类
-
- 
-
-tomcat将错误信息存储在一个properties文件中，便于读取和编辑。tomcat将properties文件划分到不同的包中，每个文件都是通过StringManager类来处理的
 
 
 
