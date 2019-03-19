@@ -9,7 +9,7 @@
 
 https://blog.csdn.net/qq_32951553/article/details/79686367
 
-
+https://www.ibm.com/developerworks/cn/java/j-lo-tomcat1/
 
 ####Tomcat原理总结
 
@@ -18,7 +18,8 @@ https://blog.csdn.net/qq_32951553/article/details/79686367
 3. Tomcat需要抓取此端口上来自客户端的链接并获得请求调用的方法与参数。
 4. Tomcat需要根据请求调用的方法，动态地加载方法所在的类，完成累的实例化并通过该实例获得需要的方法最终将请求传入方法执行。
 5. 将结果返回给客户端（jsp/html页面、json/xml字符串）
-6. 
+
+   
 #### Tcomcat总体架构
 
 ![å¾ 1.Tomcat çæ"ä½ç"æ](https://www.ibm.com/developerworks/cn/java/j-lo-tomcat1/image001.gif)
@@ -50,4 +51,9 @@ tomcat将错误信息存储在一个properties文件中，便于读取和编辑�
 
 **连接器Connector**
 
-HttpConnetcors实例维护了一个HttpProcessor的实例池，避免重复创建，
+HttpConnetcors实例维护了一个HttpProcessor的实例池，避免重复创建，创建的数量由minProcessors和maxProcessors决定，超过maxProcessors的请求会被忽略，若希望继续创建maxProcessors可以设置为负数，此外curProcessors保存了当前已有HttpProcessor实例的数量
+
+每个HttpProcessor实例负责解析Http请求行和请求头填充request对象，HttpProcessor会调用HttpConnector类的createRequest()方法和createResponse()方法
+
+每个http请求进入是会调用HttpConnetcors的私有方法createProcessor()获得一个HttpProcessor对象，拿到实例对象之后，会将客户端的套接字传入HttpProcessor的assign()方法中，目前HttpProcessor实例的任务就是读取套接字的输入流，解析Http请求。这个地方assign方法是异步处理的，所以HttpProcessor实例就可以处理多个Http请求。
+
