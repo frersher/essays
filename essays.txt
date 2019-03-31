@@ -145,36 +145,6 @@ JVM 设置参数 -XX:+HeapDumpOnOutOfMemoryError。让 JVM 碰到 OOM 的时候�
 
 
 
-
-
-
-HashMap的线程不安全问题
-
-synchronized
-
-Thread.yield()
-CPU从一个线程转移到另一个线程
-
-Executor：一个接口，其定义了一个接收Runnable对象的方法executor，其方法签名为executor(Runnable command),
-
-ExecutorService：是一个比Executor使用更广泛的子类接口，其提供了生命周期管理的方法，以及可跟踪一个或多个异步任务执行状况返回Future的方法
-
-AbstractExecutorService：ExecutorService执行方法的默认实现
-
-ScheduledExecutorService：一个可定时调度任务的接口
-
-ScheduledThreadPoolExecutor：ScheduledExecutorService的实现，一个可定时调度任务的线程池
-
-ThreadPoolExecutor：线程池，可以通过调用Executors以下静态工厂方法来创建线程池并返回一个ExecutorService对象：
-
-CachedThreadPool：为每一个任务创建线程
-FixedThreadPool：一次性的预执行代替了高昂的线程分配，同时也限制了线程的数量
-SingleThreadPool：相当于线程数为1的FixThreadPool
-
-
-线程的优先级
-可以用getPriority、setPriority查看和设置
-
 HashMap
 数组+链表
 初始化是通过initailCapacity：16和laodFactor：0.75创建默认的链表数据组
@@ -196,7 +166,6 @@ java8对hashMap的优化
 
 
 cglib动态代理
-
 
 java8新特性
 lambda表达式是一段可以传递的代码，
@@ -230,7 +199,7 @@ IO：比如我们为了读取一个TCP连接的数据，在没有数据的情况
 IO面向流、NIO面向buffer(缓冲区)
 IO的各种流是阻塞的，每次读取一个或多个字节，直至读取所有字节，没有缓存在任何地方，因此不能前后移动流中的数据。一个线程读、写必须等待读、写完。
 
-NIO处理略有不同，将数据读到缓冲区中，需要时可在缓冲区移动增加了处理的灵活性，NIO的非阻塞模式，使一个线程从某通道发送请求读取数据，但是它仅能得到目前可用的数据，如果目前没有数据可用时，就什么都不会获取。
+NIO处理略是采用单线程轮询事件的机制，将数据读到缓冲区中，需要时可在缓冲区移动增加了处理的灵活性，NIO的非阻塞模式，使一个线程从某通道发送请求读取数据，但是它仅能得到目前可用的数据，如果目前没有数据可用时，就什么都不会获取。有效的避免大量客户端连接时，频繁切换线程的性能损耗。
 
 NIO核心组成
 a) Channels(类似于IO中的Stream)   可以从Buffers中读数据，也可以写数据到Buffers
