@@ -716,6 +716,26 @@ String 不可变的好处在于
 
 
 
+jps：和unix的ps命令相似，可以列出正在运行的虚拟机进程，并显示执行的主类
+
+jstat：显示虚拟机中的类装载、内存、垃圾回收等运行数据，纯文本状态下监事虚拟机的变化，确实不如VisualVm可视化工具
+
+jinfo：实时的查看和调整虚拟机各项参数。
+
+**jmap**：Java内存映像工具，不仅可以获取dump文件，可以查询finalize执行队列、Java堆和永久代的详细信息，如空间使用率、当前用的哪种收集器等。
+
+jhat：是和jmap，jhat内置http/html服务器，生成dump文件的分析结果可以在浏览器中查看，一般不怎么用。
+
+**jstack**：Java堆栈跟踪工具，生成虚拟机当前时刻线程的快照，是当前虚拟机内每一条线程正在执行方法堆栈的集合。可以通过这个分析线程出现长时间停顿的原因，如线程死锁、死循环，请求外部资源导致长时间停顿的常见原因。
+
+**JConsole：**基于JMX的可视化监视、管理工具
+
+
+
+
+
+
+
 线上问题排查：
 jstack
 通过ps、jps找出processId，可以通过jstack -l <pid> > stack_<pid>.log，将线程栈信息打印到文件中，查看线程的执行情况。
@@ -742,6 +762,10 @@ jinfo主要用来查询jvm进程的运行时的jvm参数，以及修改jvm运行
 jinfo -flag <name> <pid>，查询进程pid name的参数值；
 jinfo -flag <name>=<value> <pid>，设置jvm参数name的值为value；
 jinfo -flag [+|-]<name>,启用某个参数或禁用某个参数。
+
+
+
+
 
 
 
