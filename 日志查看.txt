@@ -9,3 +9,6 @@ sed -n '/2017-12-20 15:00/,/2017-12-20 15:50/p' hjauditor.log   某段时间内�
 cat -n test.log |grep "地形"  >xxx.txt   保存到文件
 cat app.log |grep 'error'  查询日志中含有某个关键字的信息
 tail  -n  10  app.log   尾部10行的日志
+
+
+11111
